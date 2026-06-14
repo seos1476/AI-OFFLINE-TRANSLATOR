@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Manas Translator</title>
+</head>
+<body>
+
+<h1>Translator</h1>
+
+<textarea id="inputText" rows="5" cols="40"></textarea>
+
+<br><br>
+
+<button onclick="translateText()">
+Translate
+</button>
+
+<h2>Result:</h2>
+
+<p id="result"></p>
+
+<script>
+function translateText() {
+
+let text =
+document.getElementById("inputText").value;
+
+document.getElementById("result").innerHTML =
+"Translation: " + text;
+
+}
+</script>
+
+</body>
+</html>
