@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -14,110 +15,124 @@ font-family:'Segoe UI',sans-serif;
 }
 
 body{
-height:100vh;
+min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920') center center/cover;
+background-size:cover;
+background-position:center;
+transition:1s;
 overflow:hidden;
 }
 
 .glass{
-width:90%;
-max-width:700px;
+width:92%;
+max-width:900px;
 
 padding:30px;
 
-background:rgba(255,255,255,0.12);
+border-radius:30px;
+
+background:rgba(255,255,255,0.08);
 
 backdrop-filter:blur(20px);
 
 border:1px solid rgba(255,255,255,0.2);
 
-border-radius:30px;
-
-box-shadow:
-0 8px 32px rgba(0,0,0,0.25);
+box-shadow:0 8px 32px rgba(0,0,0,.35);
 
 color:white;
+
+animation:fadeIn 1s;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 .clock{
-font-size:50px;
+font-size:48px;
 font-weight:bold;
 text-align:center;
-margin-bottom:15px;
+margin-bottom:10px;
 }
 
 .title{
 text-align:center;
-font-size:30px;
+font-size:28px;
 margin-bottom:20px;
+}
+
+.search{
+width:100%;
+padding:15px;
+border:none;
+border-radius:20px;
+margin-bottom:15px;
+font-size:16px;
+}
+
+.row{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+flex-wrap:wrap;
+}
+
+select,
+button{
+padding:12px;
+border:none;
+border-radius:15px;
+cursor:pointer;
 }
 
 textarea{
 width:100%;
-height:140px;
-
-background:rgba(255,255,255,0.15);
-
-border:none;
-
-outline:none;
-
-color:white;
+height:150px;
 
 padding:15px;
-
-border-radius:20px;
-
-font-size:18px;
-}
-
-textarea::placeholder{
-color:#ddd;
-}
-
-button{
-width:100%;
-
-padding:15px;
-
-margin-top:15px;
 
 border:none;
 
 border-radius:20px;
 
-font-size:18px;
+resize:none;
 
-cursor:pointer;
-
-background:rgba(255,255,255,0.2);
-
-color:white;
-
-backdrop-filter:blur(10px);
+font-size:16px;
 }
 
-button:hover{
-transform:scale(1.03);
-transition:.3s;
+.counter{
+margin-top:8px;
+font-size:13px;
 }
 
 .result{
-margin-top:20px;
+margin-top:15px;
 
 padding:20px;
 
 border-radius:20px;
 
-background:rgba(255,255,255,0.12);
+background:rgba(255,255,255,.1);
 
-min-height:80px;
+min-height:100px;
+}
+
+button:hover{
+transform:scale(1.05);
+transition:.3s;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -127,20 +142,65 @@ min-height:80px;
 <div class="clock" id="clock"></div>
 
 <div class="title">
-🌍 AI Translator
+🌍 AI Offline Translator
+</div>
+
+<input
+class="search"
+placeholder="Search, translate, explore...">
+
+<div class="row">
+
+<select id="from">
+
+<option>English</option>
+<option>Hindi</option>
+<option>Marathi</option>
+
+</select>
+
+<button onclick="swapLang()">
+⇄
+</button>
+
+<select id="to">
+
+<option>Hindi</option>
+<option>English</option>
+<option>Marathi</option>
+
+</select>
+
 </div>
 
 <textarea
 id="inputText"
-placeholder="Type something...">
+placeholder="Type here..."
+oninput="countChars()">
 </textarea>
+
+<div class="counter" id="counter">
+0 characters
+</div>
+
+<div class="row">
 
 <button onclick="translateText()">
 Translate
 </button>
 
+<button onclick="copyText()">
+Copy
+</button>
+
+<button onclick="clearText()">
+Clear
+</button>
+
+</div>
+
 <div class="result" id="result">
-Translation appears here...
+Translation will appear here...
 </div>
 
 </div>
@@ -149,36 +209,70 @@ Translation appears here...
 
 function updateClock(){
 
-let now=new Date();
-
 document.getElementById("clock")
 .innerHTML=
-now.toLocaleTimeString();
+new Date().toLocaleTimeString();
+
 }
 
 setInterval(updateClock,1000);
 
 updateClock();
 
-async function translateText(){
+function countChars(){
+
+let t=
+document.getElementById("inputText").value;
+
+document.getElementById("counter")
+.innerHTML=
+t.length+" characters";
+
+}
+
+function swapLang(){
+
+let a=
+document.getElementById("from");
+
+let b=
+document.getElementById("to");
+
+let temp=a.value;
+
+a.value=b.value;
+
+b.value=temp;
+
+}
+
+function translateText(){
 
 let text=
 document.getElementById("inputText").value;
 
-let url=
-"https://api.mymemory.translated.net/get?q="
-+encodeURIComponent(text)
-+"&langpair=en|hi";
-
-let response=
-await fetch(url);
-
-let data=
-await response.json();
-
 document.getElementById("result")
 .innerHTML=
-data.responseData.translatedText;
+"Offline Engine Placeholder:<br><br>"+text;
+
+}
+
+function copyText(){
+
+navigator.clipboard.writeText(
+document.getElementById("result").innerText
+);
+
+}
+
+function clearText(){
+
+document.getElementById("inputText").value="";
+
+document.getElementById("result").innerHTML="";
+
+countChars();
+
 }
 
 </script>
